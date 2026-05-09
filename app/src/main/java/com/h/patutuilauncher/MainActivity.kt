@@ -1,47 +1,29 @@
 package com.h.patutuilauncher
 
+import android.opengl.GLSurfaceView
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.h.patutuilauncher.ui.theme.PatutUILauncherTheme
-
 class MainActivity : ComponentActivity() {
+    private lateinit var opengl_view: GLSurfaceView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContent {
-            PatutUILauncherTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-            }
+        opengl_view = GLSurfaceView(this).apply {
+            setEGLContextClientVersion(2)
+            setRenderer(Renderer())
         }
+        setContentView(opengl_view)
     }
-}
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+    override fun onResume() {
+        super.onResume()
+        opengl_view.onResume()
+    }
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    PatutUILauncherTheme {
-        Greeting("Android")
+    override fun onPause() {
+        super.onPause()
+        opengl_view.onPause()
     }
 }
